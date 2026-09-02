@@ -52,21 +52,64 @@
         background: rgba(240, 240, 240, 0.94);
         backdrop-filter: blur(8px);
         border-bottom: 1px solid #e2e2e2;
+        transition:
+          transform 0.25s ease,
+          opacity 0.25s ease;
       }
 
       .nav-buttons {
         display: flex;
         align-items: center;
+        width: 100%;
+        justify-content: center;
         gap: 8px;
       }
-      .nav-title {
-        font-family: var(--font-lang);
-        font-size: 11px;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: #8a8a8a;
-        margin-right: 10px;
-        white-space: nowrap;
+      .nav-toggle {
+        position: fixed;
+        top: 8px;
+        left: 12px;
+        z-index: 61;
+        height: 28px;
+        width: 28px;
+        padding: 0;
+        border: 1px solid #dcdcdc;
+        border-radius: 8px;
+        background: #fff;
+        color: #4a4a4a;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition:
+          background 0.12s,
+          border-color 0.12s,
+          color 0.12s;
+      }
+      .nav-toggle:hover {
+        background: #ebebeb;
+        border-color: #c2c2c2;
+        color: #111;
+      }
+      .nav-toggle:focus-visible {
+        outline: 1px solid #222222;
+        outline-offset: 2px;
+      }
+      .nav-toggle svg {
+        width: 14px;
+        height: 14px;
+        display: block;
+        transform: rotate(90deg);
+      }
+
+      /* collapsed nav state — slide up on Y axis, only the toggle button remains */
+      .nav.is-collapsed {
+        transform: translateY(-100%);
+        opacity: 0;
+        pointer-events: none;
+      }
+      .nav.is-collapsed .nav-buttons,
+      .nav.is-collapsed .nav-hint {
+        display: none;
       }
       .nav-btn {
         height: 28px;
@@ -130,15 +173,12 @@
       }
 
       /* ── Frame: full viewport on desktop, 390×780 on mobile ── */
-      .frame-mob {
-        padding: 64px 24px;
-      }
 
       .frame {
         width: 100%;
         height: 100%;
         background: var(--bg);
-        padding: 128px 24px;
+        padding: 64px 24px;
         display: none;
         flex-direction: column;
         align-items: center;
@@ -507,11 +547,40 @@
           fill="#222222"
         ></path>
       </symbol>
+      <symbol id="i-chevron-left" viewBox="0 0 16 16">
+        <path
+          d="M10 3L5 8l5 5"
+          fill="none"
+          stroke="#222222"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </symbol>
+      <symbol id="i-chevron-right" viewBox="0 0 16 16">
+        <path
+          d="M6 3l5 5-5 5"
+          fill="none"
+          stroke="#222222"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </symbol>
     </svg>
+
+    <!-- ══ Toggle (outside nav so it survives the slide) ══ -->
+    <button
+      class="nav-toggle"
+      id="nav-toggle"
+      aria-label="Свернуть панель"
+      aria-expanded="true"
+    >
+      <svg class="icon-chevron-left"><use href="#i-chevron-left" /></svg>
+    </button>
 
     <!-- ══ Prototype navigation ══ -->
     <nav class="nav" data-od-id="proto-nav" aria-label="Frames">
-      <span class="nav-title">Figma 102-5357</span>
       <div class="nav-buttons">
         <button class="nav-btn" data-frame="403" aria-pressed="true">
           403
@@ -1271,6 +1340,36 @@
         },
       );
 
+      /* ── nav panel toggle ── */
+      var navCollapsed = false;
+      try {
+        navCollapsed = localStorage.getItem("hs-err-nav-collapsed") === "1";
+      } catch (err) {}
+      var navEl = document.querySelector(".nav");
+      var navToggle = document.getElementById("nav-toggle");
+      function applyNavState() {
+        navEl.classList.toggle("is-collapsed", navCollapsed);
+        navToggle.setAttribute("aria-expanded", String(!navCollapsed));
+        navToggle.setAttribute(
+          "aria-label",
+          navCollapsed ? "Развернуть панель" : "Свернуть панель",
+        );
+        navToggle.innerHTML = navCollapsed
+          ? '<svg class="icon-chevron-right"><use href="#i-chevron-right"/></svg>'
+          : '<svg class="icon-chevron-left"><use href="#i-chevron-left"/></svg>';
+      }
+      navToggle.addEventListener("click", function () {
+        navCollapsed = !navCollapsed;
+        try {
+          localStorage.setItem(
+            "hs-err-nav-collapsed",
+            navCollapsed ? "1" : "0",
+          );
+        } catch (err) {}
+        applyNavState();
+      });
+      applyNavState();
+
       /* ── device switch: same DOM, the mobile CSS layer restyles it to 390×780 ── */
       function setDevice(d) {
         device = d;
@@ -1285,7 +1384,7 @@
             b.setAttribute("aria-pressed", String(b.dataset.device === d));
           },
         );
-        document.getElementById("nav-hint").textContent = "← → to switch "; <!-- + DEVICES[d].w + "×" + DEVICES[d].h; -->
+        document.getElementById("nav-hint").textContent = "← → to switch ";
       }
       Array.prototype.forEach.call(
         document.querySelectorAll(".nav-dev"),
