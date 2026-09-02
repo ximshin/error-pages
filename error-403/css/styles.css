@@ -1,0 +1,382 @@
+/* ==========================================================================
+   403 · Access Denied — Cartum
+   Tokens and component metrics are read from Figma (nodes 102-5357 / 128-5900).
+   Sections: 1 tokens · 2 reset & base · 3 layout · 4 components · 5 responsive
+   ========================================================================== */
+
+/* ── 1. Design tokens ─────────────────────────────────────────────────────── */
+:root {
+  --bg: #ffffff;
+  --fg: #222222; /* title, button fill, control labels */
+  --logo: #1c1c1c; /* wordmark */
+  --muted: rgba(0, 0, 0, 0.5); /* code label + body copy */
+  --surface: rgba(0, 0, 0, 0.03); /* what-box card */
+  --line: #e2e2e2; /* menu border */
+
+  --font-ui: Arial, Helvetica, sans-serif;
+  --font-lang: "Inter", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+
+  --radius: 8px;
+  --radius-sm: 6px;
+
+  /* frame inset / rhythm — Figma Auto Layout */
+  --page-inset-block: 64px;
+  --page-inset-inline: 24px;
+  --gap: 24px;
+  --main-w: 480px;
+  --main-lead: 80px;
+}
+
+/* ── 2. Reset & base ──────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  min-height: 100%;
+  background: var(--bg);
+  color: #000;
+  font-family: var(--font-ui);
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+/* ── 3. Layout ────────────────────────────────────────────────────────────── */
+/* Single centred column: wordmark on top, content in the middle, language
+   control at the bottom — the Figma frame is 1280×800 with a 64/24 inset. */
+.page {
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: var(--page-inset-block) var(--page-inset-inline);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap);
+}
+
+/* ── 4. Components ────────────────────────────────────────────────────────── */
+
+/* 4.1 logotypes — 120×21.4 wordmark */
+.logo {
+  height: 21.4px;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+}
+.logo-mark {
+  width: 120px;
+  height: 21.4px;
+}
+
+/* 4.2 main — fixed 480 column, vertically centred, gap 24 */
+.main {
+  flex: 1 1 auto;
+  width: var(--main-w);
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap);
+}
+
+/* 4.3 gear icon — 48×48, stroke #000 @30% */
+.icon {
+  flex: 0 0 auto;
+}
+.icon-mark {
+  width: 48px;
+  height: 48px;
+}
+
+/* 4.4 text block — gap 12, title group gap 0 */
+.text {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.title-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.code {
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 24.3px;
+  color: var(--muted);
+  text-align: center;
+}
+.title {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 32.4px;
+  color: var(--fg);
+  text-align: center;
+  text-wrap: balance;
+}
+.body {
+  width: 100%;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 21.6px;
+  color: var(--muted);
+  text-align: center;
+  text-wrap: pretty;
+}
+
+/* 4.5 primary action — h48, r8, fill #222, pad 12/16, gap 8 */
+.btn {
+  flex: 0 0 auto;
+  height: 48px;
+  padding: 12px 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--fg);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.btn-ico {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+}
+.btn-label {
+  font-family: var(--font-ui);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  color: #fff;
+  white-space: nowrap;
+}
+.btn:hover {
+  background: #3b3b3b;
+}
+.btn:active {
+  background: #151515;
+}
+.btn:focus-visible {
+  outline: 1px solid #222222;
+  outline-offset: 2px;
+}
+
+/* 4.6 what-box — 24 lead, card r8 on #000 @3%, pad 16/20/20/20, gap 8 */
+.what-box {
+  width: 100%;
+  flex: 0 0 auto;
+  padding-top: var(--gap);
+}
+.what {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 16px 20px 20px;
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+.what-title {
+  font-family: var(--font-ui);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 21.6px;
+  color: var(--fg);
+}
+.what-body {
+  width: 100%;
+  font-family: var(--font-ui);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 21.6px;
+  color: var(--fg);
+  text-align: left;
+  text-wrap: pretty;
+}
+
+/* 4.7 language control — 120×40 ghost button + listbox above it */
+.lang {
+  flex: 0 0 auto;
+  position: relative;
+}
+.lang-btn {
+  height: 40px;
+  padding: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 0;
+  border-radius: var(--radius);
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.lang-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+.lang-btn:focus-visible {
+  outline: 1px solid #222222;
+  outline-offset: 2px;
+}
+.lang-ico,
+.lang-chev {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+}
+.lang-chev {
+  transition: transform 0.15s;
+}
+.lang-btn[aria-expanded="true"] .lang-chev {
+  transform: rotate(180deg);
+}
+.lang-label {
+  font-family: var(--font-lang);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 16px;
+  color: var(--fg);
+  white-space: nowrap;
+}
+
+.lang-menu {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 4px);
+  transform: translateX(-50%);
+  min-width: 164px;
+  padding: 4px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  list-style: none;
+  display: none;
+  z-index: 20;
+}
+.lang-menu.is-open {
+  display: block;
+}
+.lang-opt {
+  width: 100%;
+  height: 32px;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--font-lang);
+  font-size: 14px;
+  line-height: 16px;
+  color: var(--fg);
+  text-align: left;
+}
+.lang-opt:hover {
+  background: #ededed;
+  color: #000;
+}
+.lang-opt:focus-visible {
+  outline: 1px solid #222222;
+  outline-offset: -2px;
+}
+.lang-opt[aria-selected="true"]::after {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--fg);
+}
+
+/* 4.8 toast — feedback for the support action */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translate(-50%, 90px);
+  z-index: 80;
+  padding: 12px 20px;
+  background: #111;
+  color: #fff;
+  border-radius: var(--radius);
+  font-family: var(--font-lang);
+  font-size: 13px;
+  line-height: 16px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.22s,
+    transform 0.22s;
+}
+.toast.is-on {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* ── 5. Responsive ────────────────────────────────────────────────────────── */
+/* Same tokens and components as the desktop frame; the fixed 480 column
+   releases to 100%, the inset and lead tighten so the card still fits a
+   390×780 viewport, and the action goes full width. */
+@media (max-width: 480px) {
+  .page {
+    padding: 32px 24px;
+  }
+  .main {
+    width: 100%;
+    justify-content: flex-start;
+    padding-top: 32px;
+  }
+  .btn {
+    width: 100%;
+    display: flex;
+  }
+  .lang-menu {
+    min-width: 180px;
+  }
+  /* the 120×40 control keeps its visual size; the hit area grows to 44px */
+  .lang-btn {
+    position: relative;
+  }
+  .lang-btn::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -2px;
+    bottom: -2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}

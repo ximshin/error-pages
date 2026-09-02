@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "kind": "html",
+  "title": "error-403/index.html",
+  "entry": "error-403/index.html",
+  "renderer": "html",
+  "status": "complete",
+  "exports": [
+    "html",
+    "pdf",
+    "zip"
+  ],
+  "createdAt": "2026-09-02T13:00:19.380Z",
+  "updatedAt": "2026-09-02T13:00:19.380Z",
+  "metadata": {
+    "inferred": true,
+    "reconciled": true
+  }
+}
