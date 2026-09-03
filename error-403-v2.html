@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>403 · Access Denied — Cartum</title>
+    <meta name="robots" content="noindex,nofollow" />
+    <style>
+      :root {
+        --bg: #fff;
+        --fg: #222222;
+        --logo: #1c1c1c;
+        --muted: rgba(0, 0, 0, 0.5);
+        --surface: rgba(0, 0, 0, 0.03);
+        --line: #e2e2e2;
+        --font-ui: Arial, Helvetica, sans-serif;
+        --font-lang:
+          "Inter", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+        --radius: 8px;
+        --page-inset-block: clamp(32px, 5vh, 64px);
+        --page-inset-inline: clamp(16px, 4vw, 24px);
+        --gap: 24px;
+        --main-w: 480px;
+        --main-lead: 32px;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        height: 100%;
+      }
+      body {
+        min-height: 100%;
+        background: var(--bg);
+        color: #000;
+        font-family: var(--font-ui);
+        -webkit-font-smoothing: antialiased;
+      }
+      svg {
+        display: block;
+      }
+      button {
+        font: inherit;
+        color: inherit;
+      }
+      .sprite {
+        position: absolute;
+        width: 0;
+        height: 0;
+        overflow: hidden;
+      }
+      .page {
+        min-height: 100vh;
+        min-height: 100dvh;
+        padding: var(--page-inset-block) var(--page-inset-inline);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--gap);
+      }
+      .logo {
+        height: 13px;
+        flex: 0 0 auto;
+        display: flex;
+        align-items: center;
+      }
+      .logo-mark {
+        width: 183px;
+        height: 13px;
+        color: var(--logo);
+      }
+      .main {
+        flex: 1 1 auto;
+        width: min(var(--main-w), 100%);
+        padding-top: var(--main-lead);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--gap);
+      }
+      .icon {
+        width: 48px;
+        height: 48px;
+        flex: 0 0 auto;
+      }
+      .text {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+      }
+      .title-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .code {
+        font-size: 18px;
+        font-weight: 400;
+        line-height: 24.3px;
+        color: var(--muted);
+        text-align: center;
+      }
+      .title {
+        font-size: 24px;
+        font-weight: 700;
+        line-height: 32.4px;
+        color: var(--fg);
+        text-align: center;
+        text-wrap: balance;
+      }
+      .body {
+        width: 100%;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 21.6px;
+        color: var(--muted);
+        text-align: center;
+        text-wrap: pretty;
+      }
+      .btn {
+        flex: 0 0 auto;
+        height: 48px;
+        padding: 12px 16px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        border: 0;
+        border-radius: var(--radius);
+        background: var(--fg);
+        color: #fff;
+        cursor: pointer;
+        transition: background 0.12s;
+      }
+      .btn-ico {
+        width: 16px;
+        height: 16px;
+        flex: 0 0 auto;
+        display: block;
+      }
+      .btn-label {
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 24px;
+        color: #fff;
+        white-space: nowrap;
+      }
+      .btn:hover {
+        background: #3b3b3b;
+      }
+      .btn:active {
+        background: #151515;
+      }
+      .btn:focus-visible {
+        outline: 1px solid #222222;
+        outline-offset: 2px;
+      }
+      .what-box {
+        width: 100%;
+        flex: 0 0 auto;
+        padding-top: var(--gap);
+      }
+      .what {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        padding: 16px 20px 20px;
+        border-radius: var(--radius);
+        background: var(--surface);
+      }
+      .what-title {
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 21.6px;
+        color: var(--fg);
+      }
+      .what-body {
+        width: 100%;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 21.6px;
+        color: var(--fg);
+        text-align: left;
+        text-wrap: pretty;
+      }
+      .toast {
+        position: fixed;
+        left: 50%;
+        bottom: 24px;
+        transform: translate(-50%, 90px);
+        z-index: 80;
+        padding: 12px 20px;
+        background: #111;
+        color: #fff;
+        border-radius: var(--radius);
+        font-family: var(--font-lang);
+        font-size: 13px;
+        line-height: 16px;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition:
+          opacity 0.22s,
+          transform 0.22s;
+      }
+      .toast.is-on {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+      .translate {
+        flex: 0 0 auto;
+        min-height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      #google_translate_element {
+        line-height: 1;
+      }
+      .translate-note {
+        display: none;
+        font-family: var(--font-lang);
+        font-size: 13px;
+        line-height: 16px;
+        color: var(--muted);
+      }
+      .translate.is-offline .translate-note {
+        display: block;
+      }
+      body {
+        top: 0 !important;
+      }
+      body > .skiptranslate,
+      .VIpgJd-ZVi9od-ORHb-OEVmcd,
+      .goog-te-banner-frame,
+      #goog-gt-tt,
+      .goog-te-balloon-frame {
+        display: none !important;
+      }
+      .goog-text-highlight {
+        background: none !important;
+        box-shadow: none !important;
+      }
+      .goog-te-gadget {
+        display: flex !important;
+        align-items: center;
+        gap: 8px;
+        font-size: 0 !important;
+        font-family: var(--font-lang) !important;
+        color: var(--fg) !important;
+      }
+      .goog-te-gadget img {
+        display: block;
+        height: 14px;
+        width: auto;
+        opacity: 0.55;
+      }
+      .goog-te-gadget .goog-te-combo {
+        display: inline-block !important;
+        height: 40px !important;
+        margin: 0 !important;
+        padding: 0 10px !important;
+        border: 1px solid var(--line) !important;
+        border-radius: var(--radius) !important;
+        background: transparent !important;
+        font-family: var(--font-lang) !important;
+        font-size: 14px !important;
+        line-height: 16px !important;
+        color: var(--fg) !important;
+        cursor: pointer;
+        transition:
+          background 0.12s,
+          border-color 0.12s;
+      }
+      .goog-te-gadget .goog-te-combo:hover {
+        background: rgba(0, 0, 0, 0.05) !important;
+        border-color: #cfcfcf !important;
+      }
+      .goog-te-gadget .goog-te-combo:focus-visible {
+        outline: 1px solid #222222;
+        outline-offset: 2px;
+      }
+      @media (max-width: 480px) {
+        .btn {
+          width: 100%;
+          display: flex;
+        }
+        .translate {
+          width: 100%;
+        }
+        .goog-te-gadget {
+          justify-content: center;
+        }
+        .goog-te-gadget .goog-te-combo {
+          min-width: 164px;
+        }
+        .toast {
+          max-width: calc(100vw - 32px);
+          white-space: normal;
+          text-align: center;
+        }
+      }
+      @media (min-width: 481px) {
+        .main {
+          justify-content: center;
+          padding-top: 0;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <svg class="sprite" aria-hidden="true" focusable="false">
+      <symbol id="i-logotypes" viewBox="0 0 183 13">
+        <path
+          fill="currentColor"
+          d="M5.48 2.12q1.48 0 2.59.61 1.14.59 1.72 1.74L7.98 5.53a2.9 2.9 0 0 0-2.52-1.4q-.87 0-1.58.38-.7.38-1.09 1.1-.4.7-.4 1.68 0 .99.4 1.71.4.7 1.09 1.08a3.3 3.3 0 0 0 2.98.04q.66-.34 1.12-1.06l1.81 1.06a4 4 0 0 1-1.72 1.76q-1.12.6-2.59.61a6 6 0 0 1-2.85-.67A5 5 0 0 1 0 7.29a5 5 0 0 1 2.63-4.5 6 6 0 0 1 2.85-.67m10.5 0q1.24 0 2.25.57.56.3.98.79V2.24h2.37v10.11h-2.25v-1.34q-.45.56-1.06.91a5.4 5.4 0 0 1-4.93-.08 5 5 0 0 1-1.82-1.82 5.4 5.4 0 0 1-.66-2.73q0-1.56.66-2.72a5 5 0 0 1 1.82-1.8 5.4 5.4 0 0 1 2.64-.65m18.86.19h2.71v1.9h-2.71v4.81q0 .72.36 1.12.38.39 1.04.39.8 0 1.33-.41l.66 1.68q-.42.34-1.02.52-.62.17-1.25.17a3.6 3.6 0 0 1-2.58-.86q-.91-.87-.91-2.55V0h2.37zm7.64 5.38q0 1.36.61 2.05.62.66 1.76.66a3 3 0 0 0 1.44-.34q.62-.35.96-1.02.36-.69.36-1.69V2.24h2.37v10.11h-2.25v-1.28q-.45.55-1.1.9-.99.51-2.16.52-1.29 0-2.28-.48a3.6 3.6 0 0 1-1.53-1.48 5 5 0 0 1-.55-2.52V2.24h2.37zM30.54 4.38q-.15-.04-.29-.04l-.26-.02q-1.35 0-2.14.8-.8.77-.8 2.33v4.9h-2.37V2.24h2.26v1.48q.43-.67 1.15-1.07a5 5 0 0 1 2.45-.53zm35.31-2.26q1.21 0 2.14.48.95.47 1.48 1.45.53.97.53 2.51v5.79h-2.37V6.86q0-1.35-.58-2.01-.6-.66-1.69-.66-.78 0-1.38.34t-.93 1a4 4 0 0 0-.33 1.69v5.13h-2.36V6.86q0-1.35-.59-2.01-.58-.66-1.69-.66-.77 0-1.38.34-.59.34-.93 1a4 4 0 0 0-.32 1.69v5.13h-2.37V2.24h2.26v1.28q.44-.54 1.08-.89.98-.51 2.23-.51 1.43 0 2.46.7.59.39.95.99.46-.59 1.16-1.01a5 5 0 0 1 2.63-.68M16.24 4.13a3 3 0 0 0-1.53.38q-.67.38-1.06 1.1-.4.7-.4 1.68 0 .97.4 1.69.39.72 1.06 1.1.68.38 1.53.38t1.54-.38q.67-.38 1.08-1.1.39-.72.39-1.69t-.39-1.68a3 3 0 0 0-1.08-1.1 3 3 0 0 0-1.54-.38"
+        />
+        <path fill-opacity=".2" d="M82 0h1v12.49h-1z" />
+        <path
+          fill="currentColor"
+          d="M111.94 1.46q2.6 0 3.92 1.44a4.8 4.8 0 0 1 1.31 3.34q0 1.92-1.31 3.34-1.32 1.42-3.92 1.43l-.14.02q-2.56 0-3.9-1.44a4.8 4.8 0 0 1-1.34-3.35 4.8 4.8 0 0 1 1.32-3.34q1.3-1.44 3.92-1.44zm24.18 0q2.6 0 3.92 1.44a4.8 4.8 0 0 1 1.32 3.34q0 1.92-1.32 3.34-1.32 1.43-3.92 1.45h-.14q-2.57 0-3.9-1.44a4.8 4.8 0 0 1-1.34-3.35 4.8 4.8 0 0 1 1.32-3.34q1.31-1.44 3.92-1.44zm29.88 0q2.6 0 3.91 1.44a4.8 4.8 0 0 1 1.32 3.34q0 1.92-1.32 3.34-1.3 1.43-3.88 1.45h-.18q-2.55 0-3.89-1.44a4.7 4.7 0 0 1-1.34-3.35 4.8 4.8 0 0 1 1.32-3.34q1.31-1.44 3.91-1.44zm-67.78.26c.21 0 .46.14.56.31l1.02 1.71c.1.17.26.17.36 0l1.02-1.71c.1-.17.35-.31.56-.31h2.47c.21 0 .28.13.17.29l-2.63 3.58a.6.6 0 0 0 0 .58l3.14 4.3c.12.17.04.3-.17.3h-2.59a.7.7 0 0 1-.57-.31l-1.39-2.27c-.11-.17-.28-.17-.39 0l-1.48 2.27a.8.8 0 0 1-.58.31h-2.5c-.21 0-.28-.13-.16-.29l3.13-4.18a.5.5 0 0 0 0-.58l-2.78-3.71c-.12-.16-.05-.29.16-.29zm26.33 0c.68 0 1.82.21 2.33.62a3 3 0 0 1 1.18 1.91 3 3 0 0 1 0 .99q-.04.27-.14.54-.25.75-1.03 1.37t-2.34.63h-1c-.21 0-.38.16-.38.35v2.28c0 .2-.17.36-.38.36h-2.11a.37.37 0 0 1-.38-.36V2.07c0-.19.17-.35.38-.35zm22.42 0c.21 0 .38.16.38.35v6.17c0 .2.17.35.38.35h1.44c.21 0 .38-.15.38-.35V2.07c0-.19.17-.35.38-.35h2.11c.21 0 .38.16.38.35v6.17c0 .2.17.35.38.35h1.44c.21 0 .38-.15.38-.35V2.07c0-.19.17-.35.38-.35h2.11c.21 0 .38.16.38.35v8.34c0 .2-.17.36-.38.36h-12.25a.37.37 0 0 1-.38-.36V2.07c0-.19.17-.35.38-.35zm35.65 0c.21 0 .38.16.38.35v8.34c0 .2-.17.36-.38.36h-2.11a.37.37 0 0 1-.38-.36V4.24c0-.19-.17-.35-.38-.35h-2.33c-.21 0-.38.16-.38.35v6.17c0 .2-.03.36-.07.36h-2.42a.37.37 0 0 1-.38-.36V2.07c0-.19.17-.35.38-.35zm-70.75 1.91-.32.03q-.17.02-.32.08-.64.18-1.18.76-.54.6-.54 1.74t.54 1.74a2.6 2.6 0 0 0 1.49.85l.31.02.3-.02q.15-.02.3-.07.68-.16 1.22-.75.55-.6.55-1.77t-.55-1.76a2.6 2.6 0 0 0-1.22-.76l-.3-.06zm24.18 0-.32.03q-.17.02-.32.08-.64.18-1.18.76-.53.6-.53 1.74t.53 1.74 1.18.77l.31.08.32.02.29-.02q.15-.01.3-.07.68-.16 1.22-.75.55-.6.55-1.77t-.55-1.76a2.6 2.6 0 0 0-1.22-.76l-.29-.06zm29.88 0a2 2 0 0 0-.65.11q-.63.18-1.17.76-.54.6-.54 1.74c0 .77.12 1.29.54 1.74a2.6 2.6 0 0 0 1.49.85l.31.02q.15 0 .29-.02.16-.01.31-.07.67-.16 1.22-.75.55-.6.55-1.77t-.56-1.76a2.5 2.5 0 0 0-1.21-.76l-.3-.06zm-42.38.08c-.21 0-.38.16-.38.35v1.38c0 .19.15.35.32.35l.7-.03s.31-.03.5-.15a1 1 0 0 0 .38-.39q.05-.13.07-.27l.01-.21-.01-.15-.02-.16a1 1 0 0 0-.35-.49q-.27-.23-.96-.23z"
+        />
+      </symbol>
+      <symbol id="i-gear" viewBox="0 0 48 48">
+        <path
+          fill-opacity=".3"
+          d="m29 10 1.5-.1zm1.4.6-1-1.2zm7 7 1.2 1zM38 19l.1-1.5zm0 10 .1 1.5zm-.6 1.4 1.2-1zm-7 7-1 1.2zM29 38l1.5.2zm-10 0-1.5.2zm-1.4-.5 1 1.1zm-7-7.1-1.2-1zM10 29l-.2 1.5zm0-10-.2-1.5zm.6-1.3-1.2.9zm7-7.1 1-1.2zM19 10l-1.5-.1zm1.7-5.4L19.4 4zM8 12.6l-1.5.5zM4.5 27.3l.6-1.4zm8 12.8-.6-1.4zm-1-.3 1-1zm9.1 3.7-1.3.6zm6.6 0 1.3.6zm12.7-8-1.4.5zM11.5 8.2l1.1 1zm32 19 .5 1.4zm0-6.4.5-1.4zm-8 19.3-.6 1.4zm0-32.1.5 1.4zm-31 12.8L4 19.4zm3.7 15.7-1 1zm-.2-1 1.4.5zm31.8-24-1 1.1zm.3 1 1.4.6zm-12.8-8 1.3-.5zm0 0-1.4.7c.5 1.1 1.5 3.5 1.6 5L29 10l1.5-.1c-.2-2.1-1.4-4.8-1.9-6zm3 6 1 1.3c1.2-1 3.5-2 4.7-2.4L35.4 8 35 6.6c-1.2.4-4 1.4-5.6 2.8zm6.2-2.3-1.1 1 3.4 3.4 1-1 1-1.1L37.6 7zm3.5 4.4-1.4-.5a20 20 0 0 1-2.3 4.6l1.1 1 1.2.9a23 23 0 0 0 2.9-5.5zM38 19l-.1 1.5c1.5.2 3.8 1.1 5 1.6l.5-1.3.6-1.4c-1-.5-3.8-1.7-5.9-1.9zm6 2.6h-1.5v4.8h3v-4.7zm-.6 5.7-.6-1.4c-1.1.5-3.4 1.5-5 1.6L38 29l.1 1.5c2.1-.2 4.9-1.4 6-1.9zm-6 3-1.1 1a17 17 0 0 1 2.3 4.7l1.4-.5 1.5-.6c-.5-1.1-1.6-3.8-2.9-5.5zm2.4 6.2-1-1-3.4 3.3 1 1 1.1 1.1 3.4-3.4zM35.4 40l.6-1.4a20 20 0 0 1-4.7-2.4l-1 1.2-.9 1.1c1.6 1.5 4.4 2.5 5.6 3zM29 38l-1.5-.2c-.1 1.5-1.1 3.8-1.6 5l1.4.6 1.3.6c.5-1.1 1.7-3.9 1.9-6zm-2.6 6v-1.6h-4.8v3h4.8zm-5.7-.6 1.4-.7c-.5-1.1-1.5-3.4-1.6-5L19 38l-1.5.2c.2 2 1.4 4.8 1.9 5.9zm-3-6-1-1.2a20 20 0 0 1-4.7 2.4l.6 1.4.5 1.4c1.1-.5 3.9-1.6 5.5-2.9zm-6.2 2.3 1.1-1-3.4-3.4-1 1-1 1.1 3.3 3.4zM8 35.5l1.4.5a20 20 0 0 1 2.3-4.7l-1.1-1-1.2-.9A23 23 0 0 0 6.5 35zm2-6.5.2-1.5c-1.6-.1-3.9-1-5-1.6l-.6 1.4-.6 1.3c1 .5 3.8 1.7 5.9 2zm-6-2.6h1.5v-4.7h-3v4.7zm.6-5.6.6 1.3a21 21 0 0 1 5-1.6L10 19l-.2-1.5C7.9 17.7 5 19 4 19.4zm6-3.1 1.1-1a20 20 0 0 1-2.3-4.6l-1.5.5-1.4.5a23 23 0 0 0 2.9 5.5zm-2.4-6.1 1 1 3.4-3.3-1-1.1-1.1-1L7 10.4zM12.6 8 12 9.4c1.2.4 3.5 1.4 4.7 2.3l1-1.1.9-1.2A23 23 0 0 0 13 6.6zm6.4 2 1.5.2c.1-1.5 1.1-3.9 1.6-5l-1.4-.6-1.3-.6c-.5 1-1.7 3.8-1.9 5.9zm2.6-6v1.5h4.8v-3h-4.8zM24 18v-1.5a7.5 7.5 0 0 0-7.5 7.5h3c0-2.5 2-4.5 4.5-4.5zm-6 6h-1.5c0 4.2 3.4 7.5 7.5 7.5v-3c-2.5 0-4.5-2-4.5-4.5zm6 6v1.5c4.1 0 7.5-3.3 7.5-7.5h-3c0 2.5-2 4.5-4.5 4.5zm6-6h1.5c0-4.1-3.4-7.5-7.5-7.5v3c2.5 0 4.5 2 4.5 4.5zM20.7 4.6l1.4.6q-.1.3-.5.3v-3Q20 2.5 19.4 4zM8 12.6l1.4-.5q0 .3-.2.5l-1-1-1-1.1Q6 11.7 6.4 13zM4.5 27.3l.6-1.4q.3.2.3.5h-3q0 1.5 1.5 2.3zm8 12.8-.6-1.4h.6l-1 1.1-1.1 1.1q1.1 1.1 2.6.6zm6.4-2 1.5-.2a2.3 2.3 0 0 0-3.8-1.6l1 1.2.9 1.1a1 1 0 0 1-1-.4zm2.6 6v-1.6q.3 0 .5.3l-1.4.7-1.3.6q.7 1.4 2.2 1.4zm5.7-.6-1.4-.7q.1-.3.5-.3v3q1.6 0 2.2-1.4zm3-6 1-1.2a2.3 2.3 0 0 0-3.8 1.6l1.5.1 1.5.2q0 .4-.4.5h-.7zm-12.7-27-1 1.3c1.5 1.1 3.7.2 3.9-1.6L19 10l-1.5-.1a.7.7 0 0 1 1-.5zm22.4 25-1.4.5q0-.4.2-.6l1 1 1 1.1q1.2-1 .7-2.6zM11.5 8.2l1.1 1q-.2.3-.6.2l.6-1.4.5-1.4q-1.6-.5-2.6.5zM38 29l-.1-1.5a2.3 2.3 0 0 0-1.6 3.8l1.1-1 1.2-.9a.7.7 0 0 1-.5 1.1zm6-2.6h-1.5q0-.3.3-.5l.6 1.4.6 1.3q1.5-.7 1.5-2.2zM10 19l.2 1.5a2.3 2.3 0 0 0 1.5-3.8l-1.1 1-1.2.9a1 1 0 0 1 .4-1zm33.4 1.8-.6 1.3-.3-.5h3q0-1.6-1.5-2.2zm-7 19-1-1q.2-.2.6-.1l-.6 1.4-.5 1.4q1.6.4 2.6-.6zm-25.8-9.4 1.1 1c1.2-1.5.3-3.7-1.5-3.9L10 29l-.2 1.5-.5-.4.1-.7zM35.4 8l.6 1.4-.6-.1 1-1.1 1.1-1q-1-1.1-2.6-.6zM4 21.7h1.5l-.3.4-.6-1.3-.6-1.4q-1.5.7-1.5 2.3zm33.4-4-1.1-1a2.3 2.3 0 0 0 1.6 3.8L38 19l.1-1.5q.4.1.6.4l-.1.7zM8.2 36.5l1-1q.3.1.2.5l-1.5-.5-1.4-.6q-.4 1.6.6 2.6zM29 10l-1.5.2a2.3 2.3 0 0 0 3.8 1.6l-1-1.2-.9-1.2a.7.7 0 0 1 1 .5zm10.8 1.6-1 1-.2-.5 1.4.5 1.5.5q.4-1.6-.6-2.6zm-12.5-7 1.3-.6q-.7-1.5-2.2-1.5v3l-.5-.3z"
+        />
+      </symbol>
+      <symbol id="i-support" viewBox="0 0 16 16">
+        <path
+          fill="#fff"
+          d="M8 .7c3.5 0 6.3 2.6 6.6 6Q16 7 16 8.3v2q-.1 1.4-1.3 1.7-.3 1.8-2 2.4l-2.5.6a1 1 0 0 1-.8-.5q-.2-.6.4-.8l2.5-.6q.9-.3 1-1.1-1.2-.3-1.3-1.7v-2q.1-1.2 1.3-1.6a5.3 5.3 0 0 0-10.6 0Q4 7.1 4 8.3v2Q3.9 12 2.3 12h-.6Q0 12 0 10.3v-2q.1-1.2 1.4-1.6c.3-3.4 3.1-6 6.6-6M1.7 8q-.3 0-.4.3v2q0 .3.4.4h.6q.3 0 .4-.3v-2q0-.3-.4-.4zm12 0q-.3 0-.4.3v2q0 .3.4.4h.6q.3 0 .4-.3v-2q0-.3-.4-.4z"
+        />
+      </symbol>
+    </svg>
+    <div class="page" data-od-id="page-403">
+      <header class="logo" data-od-id="logo-403">
+        <svg
+          class="logo-mark"
+          width="183"
+          height="13"
+          role="img"
+          aria-label="Cartum · Horoshop"
+        >
+          <use href="#i-logotypes" />
+        </svg>
+      </header>
+      <main class="main" data-od-id="main-403">
+        <div class="icon" data-od-id="icon-403">
+          <svg width="48" height="48" aria-hidden="true">
+            <use href="#i-gear" />
+          </svg>
+        </div>
+        <div class="text" data-od-id="text-403">
+          <div class="title-group">
+            <p class="code">403</p>
+            <h1 class="title">Access Denied</h1>
+          </div>
+          <p class="body">
+            Our security systems have flagged this connection. To protect our
+            merchants and their customers, we've restricted access from your
+            current IP or location.
+          </p>
+        </div>
+        <button class="btn" type="button" id="cta-support" data-od-id="cta-403">
+          <span class="btn-ico"
+            ><svg width="16" height="16" aria-hidden="true">
+              <use href="#i-support" /></svg></span
+          ><span class="btn-label">Contact Support</span>
+        </button>
+        <section
+          class="what-box"
+          aria-labelledby="what-title"
+          data-od-id="what-box-403"
+        >
+          <div class="what" data-od-id="what-403">
+            <h2 class="what-title" id="what-title">What can I do?</h2>
+            <p class="what-body">
+              If you need immediate assistance, please contact us. We apologize
+              for any inconvenience.
+            </p>
+          </div>
+        </section>
+      </main>
+      <footer class="translate" data-od-id="translate-403">
+        <div id="google_translate_element"></div>
+        <p
+          class="translate-note notranslate"
+          data-od-id="translate-note"
+          title="Requires access to translate.google.com"
+        >
+          Translation is unavailable
+        </p>
+      </footer>
+    </div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script>
+      !(function () {
+        "use strict";
+        var e,
+          t = document.getElementById("cta-support"),
+          o = document.getElementById("toast");
+        t &&
+          t.addEventListener("click", function () {
+            var t;
+            ((t = "Opening support…"),
+              o &&
+                t &&
+                ((o.textContent = t),
+                o.classList.add("is-on"),
+                clearTimeout(e),
+                (e = setTimeout(function () {
+                  o.classList.remove("is-on");
+                }, 2e3))));
+          });
+        var n = document.querySelector(".translate"),
+          s = Date.now();
+        !(function e() {
+          n &&
+            (document.querySelector("#google_translate_element .goog-te-combo")
+              ? n.classList.add("is-ready")
+              : Date.now() - s > 6e3
+                ? n.classList.add("is-offline")
+                : setTimeout(e, 200));
+        })();
+      })();
+    </script>
+    <script>
+      function googleTranslateElementInit() {
+        new google.translate.TranslateElement(
+          {
+            pageLanguage: "en",
+            includedLanguages: "en,uk,ru,ro",
+            layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL,
+            autoDisplay: !1,
+          },
+          "google_translate_element",
+        );
+      }
+    </script>
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  </body>
+</html>
